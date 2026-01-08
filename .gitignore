@@ -1,16 +1,41 @@
+# Dependencias de Node.js
 node_modules/
-dist/
-build/
+
+# Archivos de autenticación (sensibles, no subas a GitHub)
+auth_info/
+session.json  # Si usas un archivo de sesión
+auth_info.json
+
+# Archivos de entorno (si usas variables secretas)
+.env
+.env.local
+
+# Logs y temporales
 logs/
 *.log
-.env
-!.env.example
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos generados por editores o OS
 .DS_Store
-.vscode/
-coverage/
-session.json
-package-lock.json
-yarn.lock
-.npm/
-*.tsbuildinfo
 Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Builds y dist
+dist/
+build/
+
+# Otros (opcional, si usas Docker o tests)
+Dockerfile
+.dockerignore
+coverage/
+test-results/
+
+# Ignorar archivos grandes o innecesarios
+*.zip
+*.tar.gz
+*.rar
