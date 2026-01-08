@@ -1,0 +1,16 @@
+{
+  "name": "makiharukawa-bot",
+  "version": "1.0.0",
+  "description": "Bot de WhatsApp premium con IA y comandos",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.5.0",
+    "pino": "^8.15.0",
+    "axios": "^1.6.2"
+  },
+  "author": "makiharukawabot-cmd",
+  "license": "MIT"
+}
