@@ -4,7 +4,7 @@ Este repositorio contiene el scaffold inicial del bot de WhatsApp "MAKI HARUKAWA
 
 Características principales
 - Conexión: Baileys (WhatsApp Web) con persistencia de sesión en `./session.json`.
-- Prefijo de comandos: `/`.
+- Prefijo de comandos: `#`.
 - Owner: +57 3107400303 (privilegios owner).
 - Sistema de vinculación: Código QR y código de 8 dígitos temporal (expira en 5 minutos).
 - Estructura de comandos: cada comando en un archivo dentro de `commands/`.
