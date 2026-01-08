@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+logs/
+*.log
+.env
+!.env.example
+.DS_Store
+.vscode/
+coverage/
+session.json
+package-lock.json
+yarn.lock
+.npm/
+*.tsbuildinfo
+Thumbs.db
