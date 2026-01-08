@@ -1,61 +1,22 @@
-# MAKI HARUKAWA - WhatsApp Bot (Baileys, JavaScript)
+# 𝐌𝐀𝐊𝐈 𝐇𝐀𝐑𝐔𝐊𝐀𝐖𝐀 - Bot Premium para WhatsApp
 
-Este repositorio contiene el scaffold inicial del bot de WhatsApp "MAKI HARUKAWA" usando Baileys (WhatsApp Web) en JavaScript.
+![Logo del Bot](TU_URL_DIRECTA_DE_LA_FOTO_AQUI) <!-- Reemplaza con la URL de tu foto del menú -->
 
-Características principales
-- Conexión: Baileys (WhatsApp Web) con persistencia de sesión en `./session.json`.
-- Prefijo de comandos: `#`.
-- Owner: +57 3107400303 (privilegios owner).
-- Sistema de vinculación: Código QR y código de 8 dígitos temporal (expira en 5 minutos).
-- Estructura de comandos: cada comando en un archivo dentro de `commands/`.
-- Script para generar 300 comandos-esqueleto: `npm run gen-commands`.
-- Dockerfile y guía para despliegue local / producción (Docker + MongoDB Atlas recomendado).
+Bot premium multi-dispositivo para WhatsApp, construido con Node.js y la biblioteca @whiskeysockets/baileys. Incluye más de 300 comandos funcionales, integración con 500+ APIs, sub-bots potentes, menú elegante y vinculación segura (QR o código de 8 dígitos).
 
-Archivos y carpetas importantes
-- src/: código fuente (Baileys init, servidor Express, manejador de comandos, utilidades)
-- commands/: comandos individuales (25 implementados + plantillas)
-- commands/generate_commands.js: script para generar 300 archivos-esqueleto
-- .env.example: variables de entorno (placeholders)
-- session.json: archivo donde se persisten las credenciales de Baileys (generado en runtime)
+## Características Principales
+- **Comandos**: Más de 300 comandos organizados en plugins individuales (diversión, herramientas, IA, descargas, stickers, juegos, grupos, owner).
+- **APIs Integradas**: Soporte para 500+ APIs gratuitas (ej. catfacts, jokes, weather, Pokémon, crypto, etc.).
+- **Menú Elegante**: Menú con foto personalizada, lista de comandos y enlace al canal oficial. Sin emojis excesivos.
+- **Vinculación**: Opciones para QR o código de 8 dígitos. Owner restringido al número +57 3107400303.
+- **Sub-bots**: Comando `.jadibot` para crear instancias secundarias potentes.
+- **Canal Oficial**: https://whatsapp.com/channel/0029VbBVZGQ35fM3tALLmF2k (para actualizaciones y soporte).
+- **Modular y Escalable**: Código organizado en carpetas (config, handlers, utils, plugins) para fácil mantenimiento.
 
-Requisitos
-- Node.js 16+ (recomendado 18+)
-- npm
-- (Opcional) Docker y Docker Compose
+## Requisitos
+- Node.js v18 o superior (descarga desde [nodejs.org](https://nodejs.org)).
+- Cuenta de WhatsApp activa (no uses tu número principal para evitar bans).
+- Dependencias: `@whiskeysockets/baileys`, `figlet`, `readline-sync`, `qrcode-terminal`, `pino`, `node-fetch`, `fs`, `path`.
 
-Instalación y ejecución local
+## Instalación
 1. Clona el repo:
-   git clone https://github.com/makiharukawabot-cmd/makiharukawa-bot.git
-2. Entra al directorio:
-   cd makiharukawa-bot
-3. Copia el archivo de ejemplo de variables de entorno:
-   cp .env.example .env
-   Rellena las variables en `.env` (todas son placeholders por seguridad).
-4. Instala dependencias:
-   npm install
-5. Ejecuta en modo desarrollo (nodemon):
-   npm run dev
-6. Abre el servidor web en http://localhost:PORT (por defecto PORT en .env o 3000). Sigue las instrucciones para escanear el QR y vincular.
-
-Generar 300 comandos-esqueleto
-- Ejecuta: `npm run gen-commands`. Esto creará 300 archivos `cmd001.js` ... `cmd300.js` dentro de `commands/`.
-
-Vinculación mediante código de 8 dígitos
-- El bot genera códigos temporales de 8 dígitos que expiran en 5 minutos. Úsalos desde la interfaz o mediante el comando `/code8`.
-
-Seguridad y claves
-- No incluyas claves reales en el repositorio. Usa `.env` para almacenar claves (OpenAI, APIs, MongoDB, etc.).
-- Todas las variables sensibles están en `.env.example` como `REPLACE_ME`.
-
-Despliegue con Docker (sugerencia)
-- Construye la imagen y ejecuta con Docker. Para producción recomendamos usar MongoDB Atlas y desplegar en VPS o servicios de contenedores.
-
-Soporte
-- Owner / Admin: +57 3107400303
-
-Licencia
-- MIT
-
----
-
-Nota: Este es el commit inicial con la estructura y archivos básicos. Ejecuta `npm run gen-commands` para generar los 300 comandos-esqueleto.
