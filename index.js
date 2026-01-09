@@ -1,28 +1,46 @@
+const fs = require('fs');
+const path = require('path');
 const makeWASocket = require('@whiskeysockets/baileys').default;
-const { useMultiFileAuthState, DisconnectReason } = require('@whiskeysockets/baileys');
+const { useMultiFileAuthState } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 const readline = require('readline');
 const { BOT_NAME } = require('./config');
 const { loadData, saveData } = require('./data');
 
-function tryRequire(path) {
+function tryRequire(p) {
   try {
-    return require(path);
+    return require(p);
   } catch (err) {
-    console.warn(`Aviso: no se pudo cargar ${path}. Se usará placeholder. (${err.message})`);
-    return {}; // placeholder para evitar fallos al arrancar
+    console.warn(`Aviso: no se pudo cargar ${p}. Se usará placeholder. (${err && err.message})`);
+    return {};
   }
 }
 
-// Cargar módulos de comandos de forma tolerante
-const infoCommands = tryRequire('./commands/infoCommands');
-const downloadCommands = tryRequire('./commands/downloadCommands');
-const utilityCommands = tryRequire('./commands/utilityCommands');
-const groupCommands = tryRequire('./commands/groupCommands');
-const profileCommands = tryRequire('./commands/profileCommands');
-const economyCommands = tryRequire('./commands/economyCommands');
-const animeCommands = tryRequire('./commands/animeCommands');
-const subBotCommands = tryRequire('./commands/subBotCommands');
+// Cargar módulos de comandos de forma tolerante y normalizada
+function loadCommandModules() {
+  const cmdsDir = path.join(__dirname, 'commands');
+  const modules = [];
+  if (!fs.existsSync(cmdsDir)) return modules;
+  const files = fs.readdirSync(cmdsDir).filter(f => f.endsWith('.js'));
+  for (const file of files) {
+    const full = path.join(cmdsDir, file);
+    try {
+      const mod = require(full);
+      if (typeof mod === 'function') {
+        modules.push({ name: file, run: mod });
+      } else if (mod && typeof mod.run === 'function') {
+        modules.push({ name: file, run: mod.run.bind(mod) });
+      } else {
+        console.warn(`El módulo ${file} no exporta una función ni { run } — se ignorará en tiempo de ejecución.`);
+      }
+    } catch (err) {
+      console.warn(`Error cargando comando ${file}: ${err && err.message}`);
+    }
+  }
+  return modules;
+}
+
+let handlers = loadCommandModules();
 
 // Load data
 let { users, groups } = loadData();
@@ -73,6 +91,7 @@ rl.question('Elige opción para vincular:\n1. Código QR\n2. Código de 8 dígit
         const lowerBody = String(body).toLowerCase();
         const parts = String(body).split(/\s+/).filter(Boolean);
         const cmd = parts[0] ? parts[0].toLowerCase() : '';
+        const args = parts.slice(1);
 
         const userId = msg.key.participant || from;
         if (!users[userId]) users[userId] = { money: 0, health: 100, birth: '', genre: '', dailyClaimed: false };
@@ -100,33 +119,37 @@ rl.question('Elige opción para vincular:\n1. Código QR\n2. Código de 8 dígit
           }
         }
 
-        // Ejemplo simple de enrutamiento de comandos (modifica a tu gusto)
+        // Ruta rápida para ping (mantener compatibilidad)
         if (cmd === '/ping' || cmd === 'ping') {
           await sock.sendMessage(from, { text: 'Pong' }).catch(() => null);
         } else {
-          // Si tus módulos tienen un método run, intenta ejecutarlo
-          const args = parts.slice(1);
-          const handlers = [infoCommands, downloadCommands, utilityCommands, groupCommands, profileCommands, economyCommands, animeCommands, subBotCommands];
+          // Ejecutar handlers cargados. Si un handler devuelve true se detiene la propagación.
+          const ctx = { cmd, args, parts, from, userId, isGroup, groupSettings };
           for (const h of handlers) {
             if (h && typeof h.run === 'function') {
-              // Los módulos pueden decidir internamente si procesan el comando
-              try { await h.run(sock, msg, args); } catch (e) { /* ignorar errores de handler */ }
+              try {
+                const res = await h.run(sock, msg, args, ctx);
+                // Si el handler devuelve true, asumimos que procesó el comando y paramos.
+                if (res === true) break;
+              } catch (e) {
+                console.error(`Error en handler ${h.name || 'unknown'}:`, e && e.stack || e);
+              }
             }
           }
         }
 
       } catch (err) {
-        console.error('Error procesando mensaje:', err);
+        console.error('Error procesando mensaje:', err && err.stack || err);
       } finally {
         // Guardar datos (debounce/optimización recomendable)
-        try { saveData(users, groups); } catch (e) { console.warn('saveData failed:', e.message); }
+        try { saveData(users, groups); } catch (e) { console.warn('saveData failed:', e && e.message); }
       }
     });
 
     // Guardar al salir con CTRL+C
     process.on('SIGINT', () => {
       console.log('SIGINT recibido — guardando datos y saliendo...');
-      try { saveData(users, groups); } catch (e) { console.warn('Error guardando datos en SIGINT:', e.message); }
+      try { saveData(users, groups); } catch (e) { console.warn('Error guardando datos en SIGINT:', e && e.message); }
       process.exit(0);
     });
   });

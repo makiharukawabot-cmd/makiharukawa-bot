@@ -1,22 +1,35 @@
-// commands/ownerCommands.js - Owner exclusive commands
-const { OWNER_NUMBER } = require('../config');
-const child_process = require('child_process');
+// Wrapper para legacy ownerCommands.js (adapta la firma antigua a la nueva)
+// Firma legacy original: module.exports = async (sock, msg, from, body, parts, cmd) => { ... }
+const path = require('path');
+let legacy = null;
 
-module.exports = async (sock, msg, from, body, parts, cmd) => {
+// Intenta cargar el legacy module (si existe con la firma antigua)
+try {
+  legacy = require('./ownerCommands');
+} catch (e) {
+  // Si falla, legacy se queda null y el wrapper no hará nada
+  legacy = null;
+}
+
+exports.run = async (sock, msg, args, ctx) => {
+  if (!legacy) return false;
+  // Construir parámetros esperados por el legacy
+  const from = ctx.from;
+  const body = msg.message?.conversation || msg.message?.extendedTextMessage?.text || '';
+  const parts = ctx.parts || String(body).split(/\s+/).filter(Boolean);
+  const cmd = ctx.cmd || (parts[0] ? parts[0].toLowerCase() : '');
   const userId = msg.key.participant || from;
-  if (userId !== OWNER_NUMBER) return; // Solo owner: +57 3107400303
 
-  switch (cmd) {
-    case '#update':
-      try {
-        child_process.execSync('git pull');
-        await sock.sendMessage(from, { text: 'Bot actualizado! Reiniciando...' });
-        process.exit(0); // Restart bot
-      } catch (error) {
-        await sock.sendMessage(from, { text: 'Error al actualizar: ' + error.message });
-      }
-      break;
-
-    // Agrega más comandos owner si necesitas, ej. #restart, #broadcast
+  try {
+    // El legacy original no devolvía true/false; llamamos y asumimos que si no lanza error procesó o no.
+    await legacy(sock, msg, from, body, parts, cmd);
+    // Para evitar bloquear otros handlers, devolvemos false salvo comandos owner explícitos.
+    // Si el comando coincide con alguno owner, devolvemos true (evita que otros handlers lo procesen)
+    const ownerCmds = ['#update', '#restart', '#broadcast'];
+    if (ownerCmds.includes(cmd)) return true;
+    return false;
+  } catch (e) {
+    console.warn('ownerCommands wrapper error:', e && e.message);
+    return false;
   }
 };
