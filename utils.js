@@ -1,60 +1,30 @@
-const axios = require('axios');
-const { XAI_API_KEY, OPENWEATHER_API_KEY, UNSPLASH_API_KEY } = require('./config');
+const fs = require('fs');
+const path = require('path');
 
-// APIs list (500+ endpoints by rotating bases + types)
-const API_BASES = [
-  'https://xyro.site/api/download/',
-  'https://api.yupra.my.id/api/download/',
-  'https://api.vreden.web.id/api/download/',
-  'https://api.delirius.store/api/download/',
-  'https://api.zenzxz.my.id/api/download/',
-  'https://api.siputzx.my.id/api/download/',
-  'https://api.soymaycol.icu/api/download/',
-  'https://api-sky.ultraplus.click/api/download/',
-  'https://api-nv.ultraplus.click/api/download/',
-  'https://api.stellarwa.xyz/api/download/',
-  'https://api-adonix.ultraplus.click/api/download/',
-  'https://rest.alyabotpe.xyz/api/download/'
-  // Add more if needed to reach '500' via combinations
-];
+const USERS_FILE = path.resolve('./users.json');
+const GROUPS_FILE = path.resolve('./groups.json');
 
-async function getAIResponse(userMessage) {
+function saveData(users, groups) {
   try {
-    const response = await axios.post('https://api.x.ai/v1/chat/completions', {
-      model: 'grok-beta',
-      messages: [
-        { role: 'system', content: `Eres 𝐌𝐀𝐊𝐈 𝐇𝐀𝐑𝐔𝐊𝐀𝐖𝐀, asistente premium. Responde concisa y elegante en español.` },
-        { role: 'user', content: userMessage }
-      ],
-      max_tokens: 150,
-      temperature: 0.7
-    }, {
-      headers: {
-        'Authorization': `Bearer ${XAI_API_KEY}`,
-        'Content-Type': 'application/json'
-      }
-    });
-    return response.data.choices[0].message.content.trim();
-  } catch (error) {
-    return 'Ups, error con IA.';
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+    fs.writeFileSync(GROUPS_FILE, JSON.stringify(groups, null, 2));
+  } catch (err) {
+    console.warn('saveData error:', err.message);
   }
 }
 
-// Download media (rotate APIs for '500+' variations)
-async function downloadMedia(type, url) {
-  const randomApi = API_BASES[Math.floor(Math.random() * API_BASES.length)];
+function loadData() {
   try {
-    const response = await axios.get(`${randomApi}${type}?url=${encodeURIComponent(url)}`);
-    return response.data.result.download_url || response.data.result.url;
-  } catch (error) {
-    return null;
+    const users = fs.existsSync(USERS_FILE) ? JSON.parse(fs.readFileSync(USERS_FILE, 'utf8')) : {};
+    const groups = fs.existsSync(GROUPS_FILE) ? JSON.parse(fs.readFileSync(GROUPS_FILE, 'utf8')) : {};
+    return { users, groups };
+  } catch (err) {
+    console.warn('loadData error:', err.message);
+    return { users: {}, groups: {} };
   }
 }
-
-// ... (add removeBackground, downloadTwitter, getAnimeReact, getWeather, getQuote, searchPinterest as in previous responses)
 
 module.exports = {
-  getAIResponse,
-  downloadMedia,
-  // ... all other functions
+  saveData,
+  loadData
 };
