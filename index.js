@@ -248,4 +248,3 @@ async function startBot() {
     console.log(chalk.gray('[ ✿  ]  Base de datos cargada correctamente.'))
   await startBot()
 })()
-```
