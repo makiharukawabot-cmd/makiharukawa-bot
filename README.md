@@ -37,7 +37,6 @@ Bot premium multi-dispositivo para WhatsApp, desarrollado con Node.js y la bibli
    ```bash
    git clone https://github.com/makiharukawabot-cmd/makiharukawa-bot
  
-  ```
 2. **Accede al Directorio**:  
    ```bash
    cd maki-harukawa-bot
