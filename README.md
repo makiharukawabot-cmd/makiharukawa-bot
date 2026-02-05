@@ -49,7 +49,7 @@ Bot premium multi-dispositivo para WhatsApp, desarrollado con Node.js y la bibli
 
 4. **Inicia el Bot**:  
    ```bash
-   node .
+   node Index.js
    ```
    Escanea el QR en la terminal o ingresa el código de 8 dígitos para vincular.
 
