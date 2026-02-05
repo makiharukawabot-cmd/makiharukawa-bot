@@ -605,3 +605,898 @@ main {
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 46, 99, 0.1) 0%, transparent 70%);
+    z-index: 1;
+}
+
+.cta-content {
+    position: relative;
+    z-index: 10;
+}
+
+.cta-content h3 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--stellar-light-gray);
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, var(--stellar-red), var(--stellar-purple), var(--stellar-blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.cta-content p {
+    font-size: 0.9rem;
+    color: var(--stellar-gray);
+    line-height: 1.6;
+    max-width: 30rem;
+    margin: 0 auto 2rem auto;
+}
+
+.user-badge-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--stellar-light);
+    border-radius: 2rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 2rem;
+}
+
+.user-avatars {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatars img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--stellar-dark);
+    margin-left: -0.5rem;
+}
+
+.user-avatars img:first-child {
+    margin-left: 0;
+}
+
+.user-avatars .avatar-more {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: linear-gradient(to right, var(--stellar-red), var(--stellar-purple));
+    color: var(--stellar-light-gray);
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--stellar-dark);
+    margin-left: -0.5rem;
+}
+
+.user-badge-container span {
+    font-size: 0.8rem;
+    color: var(--stellar-gray);
+}
+
+.create-section, .list-section {
+    max-width: 35rem;
+    margin: 0 auto;
+}
+
+.section-header {
+    padding: 2rem;
+    border-radius: 1rem 1rem 0 0;
+    background: linear-gradient(to right, var(--stellar-red), var(--stellar-purple));
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.section-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.section-header-content {
+    position: relative;
+    z-index: 10;
+}
+
+.section-header-content h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--stellar-light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.section-header-content p {
+    font-size: 0.9rem;
+    color: var(--stellar-light-gray);
+    opacity: 0.8;
+    margin-top: 0.5rem;
+}
+
+.form-container {
+    padding: 2rem;
+    border-radius: 0 0 1rem 1rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--stellar-gray);
+    margin-bottom: 0.5rem;
+    margin-left: 0.25rem;
+}
+
+.form-group .input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 2.5rem;
+    font-size: 1.2rem;
+    color: var(--stellar-gray);
+    transition: color 0.3s ease;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3.5rem;
+    border-radius: 0.75rem;
+    background-color: var(--stellar-light);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--stellar-light-gray);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--stellar-red);
+    box-shadow: 0 0 10px rgba(255, 46, 99, 0.2);
+}
+
+.form-group input:focus + .input-icon {
+    color: var(--stellar-red);
+}
+
+.code-area {
+    display: none;
+    margin-top: 2rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background-color: var(--stellar-darker);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    text-align: center;
+}
+
+.code-area-header {
+    padding: 1rem;
+    background-color: var(--stellar-dark);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.code-dots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+}
+
+.dot.red { background-color: var(--stellar-red); }
+.dot.yellow { background-color: var(--stellar-yellow); }
+.dot.cyan { background-color: var(--stellar-cyan); }
+
+.code-area-header span {
+    font-size: 0.7rem;
+    color: var(--stellar-gray);
+    font-family: monospace;
+}
+
+.code-area-header .timer {
+    margin-left: auto;
+    font-size: 0.7rem;
+    color: var(--stellar-gray);
+}
+
+.code-display {
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    background: radial-gradient(circle at center, rgba(255, 46, 99, 0.05) 0%, transparent 70%);
+    border-radius: 0.5rem;
+}
+
+.code-display h4 {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--stellar-red);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+}
+
+.code-display #code-display {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--stellar-light-gray);
+    font-family: monospace;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border: 1px dashed rgba(255, 46, 99, 0.3);
+    border-radius: 0.5rem;
+    background-color: rgba(26, 27, 38, 0.8);
+}
+
+.code-display p {
+    font-size: 0.8rem;
+    color: var(--stellar-gray);
+    margin-bottom: 1.5rem;
+}
+
+.copy-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: rgba(125, 95, 255, 0.2);
+    color: var(--stellar-purple);
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+    background-color: rgba(125, 95, 255, 0.3);
+}
+
+.list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}
+
+.list-header h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--stellar-light-gray);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.bot-count-badge {
+    padding: 0.5rem 1rem;
+    background-color: rgba(255, 46, 99, 0.2);
+    color: var(--stellar-red);
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.refresh-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: var(--stellar-light);
+    border: none;
+    color: var(--stellar-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+    color: var(--stellar-light-gray);
+    background-color: var(--stellar-dark);
+}
+
+.bots-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.bot-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    width: 100%;
+    max-width: 30rem;
+    margin: 0 auto;
+}
+
+.bot-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.bot-card-header {
+    height: 8rem;
+    background-color: var(--stellar-dark);
+    position: relative;
+    overflow: hidden;
+}
+
+.bot-card-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: transform 0.7s ease;
+}
+
+.bot-card:hover .bot-card-header img {
+    transform: scale(1.1);
+}
+
+.bot-card-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--stellar-dark) 0%, transparent 100%);
+}
+
+.bot-type-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: rgba(26, 27, 38, 0.8);
+    color: var(--stellar-light-gray);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    z-index: 10;
+}
+
+.bot-card-body {
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    position: relative;
+}
+
+.bot-avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    border: 3px solid var(--stellar-dark);
+    position: absolute;
+    top: -2rem;
+    left: 1.5rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.bot-card-body h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--stellar-light-gray);
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+.bot-phone {
+    font-size: 0.8rem;
+    color: var(--stellar-gray);
+    font-family: monospace;
+    margin-bottom: 1rem;
+}
+
+.last-update {
+    font-size: 0.7rem;
+    color: var(--stellar-gray);
+    margin-bottom: 1.5rem;
+}
+
+.bot-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.tag {
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.tag.blue {
+    background-color: rgba(0, 201, 255, 0.2);
+    color: var(--stellar-blue);
+}
+
+.tag.purple {
+    background-color: rgba(125, 95, 255, 0.2);
+    color: var(--stellar-purple);
+}
+
+.tag.cyan {
+    background-color: rgba(61, 236, 177, 0.2);
+    color: var(--stellar-cyan);
+}
+
+.bot-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.action-btn.edit {
+    background-color: var(--stellar-light);
+    color: var(--stellar-light-gray);
+}
+
+.action-btn.edit:hover {
+    background-color: var(--stellar-dark);
+    box-shadow: 0 0 15px rgba(0, 201, 255, 0.2);
+}
+
+.action-btn.delete {
+    background-color: rgba(255, 46, 99, 0.2);
+    color: var(--stellar-red);
+}
+
+.action-btn.delete:hover {
+    background-color: rgba(255, 46, 99, 0.3);
+    box-shadow: 0 0 15px rgba(255, 46, 99, 0.2);
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 100;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.modal.active {
+    display: flex;
+    animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: var(--stellar-dark);
+    border-radius: 1.5rem;
+    width: 100%;
+    max-width: 30rem;
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: transform 0.3s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    height: 10rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: transform 0.7s ease;
+}
+
+.modal-content:hover .modal-header img {
+    transform: scale(1.05);
+}
+
+.modal-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--stellar-dark) 0%, transparent 100%);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: rgba(26, 27, 38, 0.8);
+    border: none;
+    color: var(--stellar-light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.modal-close-btn:hover {
+    background-color: var(--stellar-red);
+    color: var(--stellar-light-gray);
+}
+
+.modal-header-title {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--stellar-light-gray);
+    z-index: 10;
+}
+
+.modal-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-body-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.modal-avatar-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.modal-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    border: 2px solid var(--stellar-red);
+}
+
+.modal-bot-id {
+    font-size: 0.8rem;
+    color: var(--stellar-gray);
+    background-color: var(--stellar-light);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-family: monospace;
+}
+
+.modal-last-update {
+    font-size: 0.7rem;
+    background-color: rgba(0, 201, 255, 0.2);
+    color: var(--stellar-blue);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-row label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--stellar-gray);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-row input {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: var(--stellar-light);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--stellar-light-gray);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-row input:focus {
+    outline: none;
+    border-color: var(--stellar-red);
+    box-shadow: 0 0 10px rgba(255, 46, 99, 0.2);
+}
+
+.url-validation-icon {
+    position: absolute;
+    right: 1rem;
+    top: 3rem;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.url-valid {
+    color: var(--stellar-cyan);
+}
+
+.url-invalid {
+    color: var(--stellar-red);
+}
+
+.modal-footer {
+    padding: 1.5rem 2rem;
+    background-color: var(--stellar-light);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.modal-footer-btn {
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.modal-footer-btn.cancel {
+    background-color: transparent;
+    color: var(--stellar-gray);
+}
+
+.modal-footer-btn.cancel:hover {
+    color: var(--stellar-light-gray);
+}
+
+.modal-footer-btn.save {
+    background: linear-gradient(to right, var(--stellar-red), var(--stellar-purple));
+    color: var(--stellar-light-gray);
+}
+
+.modal-footer-btn.save:hover {
+    box-shadow: 0 0 20px rgba(255, 46, 99, 0.3);
+}
+
+.notification {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: var(--stellar-dark);
+    border-radius: 0.75rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    transform: translateX(150%);
+    transition: transform 0.3s ease-out;
+    z-index: 200;
+    border-left: 4px solid var(--stellar-red);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    max-width: 20rem;
+}
+
+.notification.active {
+    transform: translateX(0);
+}
+
+.notification-icon {
+    font-size: 1.2rem;
+    color: var(--stellar-red);
+    margin-top: 0.2rem;
+}
+
+.notification-content h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--stellar-light-gray);
+    margin-bottom: 0.25rem;
+}
+
+.notification-content p {
+    font-size: 0.8rem;
+    color: var(--stellar-gray);
+    line-height: 1.4;
+}
+
+.notification-close {
+    background: transparent;
+    border: none;
+    color: var(--stellar-gray);
+    cursor: pointer;
+    transition: color 0.3s ease;
+    margin-left: 0.5rem;
+}
+
+.notification-close:hover {
+    color: var(--stellar-light-gray);
+}
+
+.hidden {
+    display: none;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.shadow-stellar-glow {
+    box-shadow: 0 0 25px rgba(255, 46, 99, 0.2);
+}
+
+@media (min-width: 48rem) {
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .protection-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bots-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 60rem;
+    }
+
+    .bot-card {
+        margin: 0;
+    }
+
+    .hero-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .cta-content h3 {
+        font-size: 2rem;
+    }
+
+    .code-display #code-display {
+        font-size: 3rem;
+    }
+}
+
+@media (min-width: 64rem) {
+    .bots-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 75rem;
+    }
+}
+</style>
+</head>
+<body>
+<div id="overlay"></div>
+
+<nav class="nav-glass">
+    <div class="nav-logo-container">
+        <div class="nav-logo">
+            <img src="https://cdn.sockywa.xyz/files/tUDG.jpeg" alt="Wa Pro Logo">
+        </div>
+        <div class="nav-title">
+            <h1>Yuki Wa</h1>
+            <span>SubBot Manager</span>
+        </div>
+    </div>
+    <button class="nav-toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars-staggered"></i>
+    </button>
+</nav>
+
+<aside id="sidebar">
+    <div class="sidebar-header">
+        <h3>Menú Principal</h3>
+        <button class="sidebar-close-btn" onclick="toggleSidebar()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="sidebar-user">
+        <div class="user-avatar">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="user-info">
+            <p>Sesión Activa</p>
+            <h4>Administrador</h4>
+        </div>
+    </div>
+    <div class="sidebar-nav">
+        <button class="nav-btn active-nav-item" onclick="switchTab('home')" id="nav-home">
+            <i class="fas fa-rocket"></i>
+            <span>Beneficios</span>
+        </button>
+        <button class="nav-btn" onclick="switchTab('create')" id="nav-create">
+            <i class="fas fa-circle-plus"></i>
+            <span>Crear SubBot</span>
+        </button>
+        <button class="nav-btn" onclick="switchTab('list')" id="nav-list">
+            <i class="fas fa-robot"></i>
+            <span>Mis SubBots</span>
+        </button>
+        <button class="nav-btn">
+            <i class="fas fa-gear"></i>
+            <span>Ajustes</span>
+        </button>
+        <button class="nav-btn">
+            <i class="fas fa-circle-question"></i>
+            <span>Ayuda</span>
+        </button>
+    </div>
+    <div class="sidebar-footer">
+        <button class="sidebar-footer-btn" onclick="toggleSidebar()">
+            <i class="fas fa-xmark"></i>
+            <span>Cerrar Menú</span>
+        </button>
+    </div>
+</aside>
+
+<main>
+    <section id="tab-home" class="section active">
+        <div class="hero-section glass-morphism">
+            <div class="hero-bg-blur-1"></div>
+            <div class="hero-bg-blur-2"></div>
+            <div class="hero-content">
+                <img src="https://cdn.sockywa.xyz/files/kH2N.jpeg" alt="Wa Hero">
+                <h2>Potencia tu WhatsApp <br> con <span>Yuki Wa</span></h2>
+                <p>La plataforma más avanzada y estable para gestionar tus SubBots. Automatización inteligente con diseño de vanguardia y sincronización en tiempo real.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="switchTab('create')">
