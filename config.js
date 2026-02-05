@@ -11,7 +11,7 @@ api: 'https://api.stellarwa.xyz',
 web: 'http://localhost:5010',
 channel: "https://whatsapp.com/channel/0029VbBVZGQ35fM3tALLmF2k",
 github: "https://github.com/makiharukawabot-cmd/makiharukawa-bot",
-gmail: "thekingdestroy507@gmail.com"
+gmail: "makiharukawa.bot@gmail.com"
 }
 global.my = {
 ch: '120363401404146384@newsletter',
