@@ -35,10 +35,9 @@ Bot premium multi-dispositivo para WhatsApp, desarrollado con Node.js y la bibli
 ## Instalación
 1. **Clona el Repositorio**:  
    ```bash
-   git clone https://github.com/tu-usuario/maki-harukawa-bot.git
-   ```
-   (Reemplaza `tu-usuario` con tu nombre de usuario en GitHub).
-
+   git clone https://github.com/makiharukawabot-cmd/makiharukawa-bot
+ 
+  ```
 2. **Accede al Directorio**:  
    ```bash
    cd maki-harukawa-bot
