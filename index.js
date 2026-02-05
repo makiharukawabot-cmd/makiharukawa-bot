@@ -1,4 +1,4 @@
-import "./settings.js"
+import "./config.js"
 import main from './main.js'
 import web from './lib/system/web.js'
 import events from './commands/events.js'
