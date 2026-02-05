@@ -56,11 +56,11 @@ const log = {
 
 const { say } = cfonts
 console.log(chalk.magentaBright('\n❀ Iniciando...'))
-  say('Yuki Suou', {
+  say('MAKI', {
   align: 'center',           
   gradient: ['red', 'blue'] 
 })
-  say('Made with love by Destroy', {
+  say('(power by 𝓐)', {
   font: 'console',
   align: 'center',
   gradient: ['blue', 'magenta']
@@ -248,3 +248,4 @@ async function startBot() {
     console.log(chalk.gray('[ ✿  ]  Base de datos cargada correctamente.'))
   await startBot()
 })()
+```
