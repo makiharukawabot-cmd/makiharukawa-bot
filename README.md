@@ -1,4 +1,4 @@
-# 𝐌𝐀𝐊𝐈 𝐇𝐀𝐑𝐔𝐊𝐀𝐖𝐀 - Bot Premium para WhatsApp
+# 𝐌𝐀𝐊𝐈 𝐇𝐀𝐑𝐔𝐊𝐀𝐖𝐀 - Bot para WhatsApp
 
 ![Banner del Bot](https://i.pinimg.com/736x/b6/07/ae/b607ae73c96b7147b9578636c1b56000.jpg)
 
