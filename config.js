@@ -5,7 +5,7 @@ global.botNumber = ''
 
 global.sessionName = 'Sessions/Owner'
 global.version = '^2.0 - Latest'
-global.dev = "© ⍴᥆ᥕᥱrᥱძ ᑲᥡ ⁱᵃᵐ|𝓐"
+global.dev = "© ⍴᥆ᥕᥱrᥱძ ᑲᥡ Aᴀʀᴏᴍ"
 global.links = {
 api: 'https://api.stellarwa.xyz',
 web: 'http://localhost:5010',
