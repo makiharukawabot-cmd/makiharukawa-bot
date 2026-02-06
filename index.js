@@ -60,7 +60,7 @@ console.log(chalk.magentaBright('\n❀ Iniciando...'))
   align: 'center',           
   gradient: ['red', 'blue'] 
 })
-  say('(power by 𝓐)', {
+  say('(power by Aᴀʀᴏᴍ)', {
   font: 'console',
   align: 'center',
   gradient: ['blue', 'magenta']
