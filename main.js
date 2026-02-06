@@ -13,6 +13,10 @@ import { getGroupAdmins } from './lib/message.js';
 seeCommands()
 
 export default async (client, m) => {
+if (global.comandos.size === 0) {
+  console.log('Cargando comandos por primera vez...');
+  await seeCommands();
+}
 if (!m.message) return
 const sender = m.sender 
 let body = m.message.conversation || m.message.extendedTextMessage?.text || m.message.imageMessage?.caption || m.message.videoMessage?.caption || m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply?.selectedRowId || m.message.templateButtonReplyMessage?.selectedId || ''
