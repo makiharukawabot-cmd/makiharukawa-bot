@@ -1,4 +1,4 @@
-export default {
+ export default {
   command: ['monthly', 'mensual'],
   category: 'rpg',
   run: async (client, m, args, usedPrefix) => {
