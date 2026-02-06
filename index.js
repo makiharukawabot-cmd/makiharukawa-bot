@@ -56,11 +56,11 @@ const log = {
 
 const { say } = cfonts
 console.log(chalk.magentaBright('\n❀ Iniciando...'))
-  say('MAKI', {
+  say('Yuki Suou', {
   align: 'center',           
   gradient: ['red', 'blue'] 
 })
-  say('(power by Aᴀʀᴏᴍ)', {
+  say('Made with love by Destroy', {
   font: 'console',
   align: 'center',
   gradient: ['blue', 'magenta']
