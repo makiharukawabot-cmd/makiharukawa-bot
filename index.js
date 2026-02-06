@@ -204,7 +204,7 @@ async function startBot() {
          const userJid = jidNormalizedUser(client.user.id)
          web(client)
          await seeCommands()
-         await events(client)
+         await events(client)  // Quité 'm' aquí, asumiendo que events no lo necesita. Si sí, mueve esto a messages.upsert.
          const userName = client.user.name || "Desconocido"
          console.log(chalk.green.bold(`[ ✿ ]  Conectado a: ${userName}`))
     }
