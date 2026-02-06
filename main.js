@@ -35,7 +35,7 @@ const chat = global.db.data.chats[m.chat] || {}
 const settings = global.db.data.settings[botJid] || {}  
 const user = global.db.data.users[sender] ||= {}
 const users = chat.users[sender] || {}
-const rawBotname = settings.namebot || 'Yuki'
+const rawBotname = settings.namebot || '𝐌𝐀𝐊𝐈'
 const tipo = settings.type || 'Sub'
 const isValidBotname = /^[\w\s]+$/.test(rawBotname)
 const namebot = isValidBotname ? rawBotname : 'Yuki'
