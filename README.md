@@ -54,7 +54,7 @@ Bot premium multi-dispositivo para WhatsApp, desarrollado con Node.js y la bibli
    Escanea el QR en la terminal o ingresa el código de 8 dígitos para vincular.
 
 5. **Configuración Inicial**:  
-   - Edita `config.js` para personalizar el prefijo de comandos (por defecto: `.`), el owner y otras opciones.
+   - Edita `settings.js` para personalizar el prefijo de comandos (por defecto: `.`), el owner y otras opciones.
    - Asegúrate de que el número owner esté configurado para acceder a funciones exclusivas.
 
 ## Uso
