@@ -1,5 +1,5 @@
 {
-  "name": "𝐌𝐀𝐊𝐈",
+  "name": "yukiwabot",
   "version": "2.0",
   "description": "WhatsApp Bot Multi Device",
   "main": "index.js",
@@ -14,7 +14,7 @@
     "bot-wa",
     "multi-device"
   ],
-  "author": "Aarom",
+  "author": "The-King-Destroy",
   "license": "MIT",
   "engines": {
     "node": ">=21.7.3",
