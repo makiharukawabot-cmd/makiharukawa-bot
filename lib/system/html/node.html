@@ -1998,3 +1998,395 @@ async function requestCode() {
             startCountdown();
 
             const config = await getBotConfigs(phone);
+            if (config) {
+                let bots = JSON.parse(localStorage.getItem('stellarBots') || '[]');
+                bots.push({
+                    idDigits: phoneDigits,
+                    jid: phoneDigits + "@s.whatsapp.net",
+                    label: label.value.trim(),
+                    botType: botType.value,
+                    createdAt: Date.now(),
+                    updatedAt: Date.now(),
+                    banner: config.banner || 'https://cdn.sockywa.xyz/files/kH2N.jpeg',
+                    icon: config.icon || 'https://cdn.sockywa.xyz/files/RTnq.jpeg',
+                    longName: config.namebot || 'Alya San',
+                    shortName: config.namebot2 || 'Alya',
+                    canal: config.canal || 'https://whatsapp.com/channel/0029VbApwZ9ISTkEBb6ttS3F',
+                    prefix: config.prefijo || '/',
+                    owner: config.owner || 'Oculto por privacidad',
+                    currency: config.currency || 'Coins',
+                    link: config.link || 'https://api.stellarwa.xyz'
+                });
+                localStorage.setItem('stellarBots', JSON.stringify(bots));
+                document.getElementById('bot-count').textContent = bots.length;
+            }
+
+            if (data.connected) {
+                showNotification('success', 'Bot Conectado', 'El bot está listo para usar y sincronizado');
+            } else {
+                showNotification('info', 'Código Generado', 'Vincula en WhatsApp > Dispositivos Vinculados');
+            }
+        } else {
+            showNotification('error', 'Error', data.error || data.message || 'No se pudo generar el código');
+        }
+    } catch (e) {
+        console.log(e);
+        showNotification('error', 'Error de Conexión', `Fallo de conexión con el servidor :: ${e}`);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Generar Código de Vinculación</span><i class="fas fa-arrow-right text-xl"></i>';
+    }
+}
+
+async function loadBots() {
+    const grid = document.getElementById('bots-grid');
+    grid.innerHTML = ''; // Limpiar la cuadrícula antes de cargar.
+
+    try {
+        let localBots = JSON.parse(localStorage.getItem('stellarBots') || '[]');
+        document.getElementById('bot-count').textContent = localBots.length;
+
+        if (localBots.length === 0) {
+            grid.innerHTML = `
+            <div class="glass-morphism bot-card">
+                <div class="bot-card-body text-center py-10">
+                    <i class="fas fa-folder-open text-5xl text-gray-500 mb-4"></i>
+                    <h3 class="text-xl text-gray-300 mb-2">No hay Bots Activos</h3>
+                    <p class="text-sm text-gray-500 mb-6">Crea tu primer SubBot.</p>
+                </div>
+            </div>`;
+            return;
+        }
+
+        for (const bot of localBots) {
+            const statusResponse = await fetch(`/bots/status?phone=${bot.idDigits}`);
+            const statusData = await statusResponse.json();
+
+            const lastUpdate = new Date(bot.updatedAt);
+            const formattedDate = `${lastUpdate.toLocaleDateString()} ${lastUpdate.toLocaleTimeString()}`;
+            const isOnline = statusData.ok && statusData.status === 'online';
+
+            grid.innerHTML += `
+            <div class="glass-morphism bot-card">
+                <div class="bot-card-header">
+                    <img src="${bot.banner}" alt="Banner ${bot.label}">
+                    <div class="bot-type-badge">${bot.botType.toUpperCase()}</div>
+                </div>
+                <div class="bot-card-body">
+                    <img src="${bot.icon}" class="bot-avatar" alt="Ícono ${bot.label}">
+                    <h3>${bot.label}</h3>
+                    <p class="bot-phone">+${bot.idDigits}</p>
+                    <p class="last-update">Última sincronización: ${formattedDate}</p>
+                    <div class="bot-tags">
+                        <span class="tag blue">Prefijo: ${bot.prefix}</span>
+                        <span class="tag purple">${bot.currency}</span>
+                        ${isOnline ? '<span class="tag cyan">Online</span>' : '<span class="tag red">Offline</span>'}
+                    </div>
+                    <div class="bot-actions">
+                        ${isOnline ? `<button onclick="openModal('${bot.idDigits}')" class="action-btn edit"><i class="fas fa-gear"></i> Editar</button>` : ''}
+                        <button onclick="deleteBot('${bot.idDigits}')" class="action-btn delete"><i class="fas fa-power-off"></i> Eliminar</button>
+                    </div>
+                </div>
+            </div>`;
+        }
+    } catch (e) {
+        console.error(e);
+        grid.innerHTML = `
+        <div class="glass-morphism bot-card">
+            <div class="bot-card-body text-center py-10">
+                <i class="fas fa-exclamation-triangle text-5xl text-yellow-500 mb-4"></i>
+                <h3 class="text-xl text-gray-300 mb-2">Error al cargar bots</h3>
+                <p class="text-sm text-gray-500 mb-6">Intenta recargar la página o verifica tu conexión a internet</p>
+                <button onclick="loadBots()" class="btn btn-secondary">
+                    <i class="fas fa-sync mr-2"></i> Reintentar Carga
+                </button>
+            </div>
+        </div>`;
+    }
+}
+
+async function deleteBot(idDigits) {
+    const conf = await Swal.fire({
+        title: '¿Eliminar SubBot?',
+        text: "Se eliminará la sesión y toda la configuración guardada de forma permanente.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#FF2E63',
+        cancelButtonColor: '#252836',
+        confirmButtonText: 'Sí, eliminar definitivamente',
+        cancelButtonText: 'Cancelar',
+        background: '#1A1B26',
+        color: '#fff',
+        customClass: {
+            confirmButton: 'px-6 py-2 rounded-lg font-bold',
+            cancelButton: 'px-6 py-2 rounded-lg font-bold'
+        }
+    });
+
+    if (conf.isConfirmed) {
+        try {
+            const res = await fetch('/delete-bot', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    phone: `${idDigits}`
+                })
+            });
+            const data = await res.json();
+
+            let bots = JSON.parse(localStorage.getItem('stellarBots') || '[]');
+            bots = bots.filter(b => b.idDigits !== idDigits);
+            localStorage.setItem('stellarBots', JSON.stringify(bots));
+
+            if (data.ok) {
+                loadBots();
+                showNotification('success', 'Bot Eliminado', 'La sesión y configuración han sido eliminadas');
+            } else {
+                throw new Error(data.error || 'No se pudo eliminar el bot del servidor, pero sí de tu almacenamiento local');
+            }
+        } catch (e) {
+            loadBots();
+            showNotification('warning', 'Eliminación Parcial', e.message);
+        }
+    }
+}
+
+function copyCode(btn) {
+    const code = document.getElementById('code-display').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check mr-2"></i> Código Copiado';
+        btn.classList.add('bg-stellar-cyan/20');
+        btn.classList.add('text-stellar-cyan');
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('bg-stellar-cyan/20');
+            btn.classList.remove('text-stellar-cyan');
+        }, 2000);
+    });
+}
+
+async function openModal(idDigits) {
+    const modal = document.getElementById('modal-personalize');
+    const bots = JSON.parse(localStorage.getItem('stellarBots') || '[]');
+    const bot = bots.find(b => b.idDigits === idDigits);
+
+    if (!bot) return showNotification('error', 'Error', 'Bot no encontrado');
+
+    const serverConfig = await getBotConfigs(idDigits);
+    if (serverConfig) {
+        const updatedBot = {
+            ...bot,
+            updatedAt: Date.now(),
+            banner: serverConfig.banner || bot.banner,
+            icon: serverConfig.icon || bot.icon,
+            longName: serverConfig.namebot || bot.longName,
+            shortName: serverConfig.namebot2 || bot.shortName,
+            canal: serverConfig.canal || bot.canal,
+            prefix: serverConfig.prefijo || bot.prefix,
+            owner: serverConfig.owner || bot.owner,
+            currency: serverConfig.currency || bot.currency,
+            link: serverConfig.link || bot.link
+        };
+        const updatedBots = bots.map(b => b.idDigits === idDigits ? updatedBot : b);
+        localStorage.setItem('stellarBots', JSON.stringify(updatedBots));
+    }
+
+    document.getElementById('modal-bot-tag').textContent = `ID: ${idDigits.slice(-4)}`;
+    document.getElementById('modal-banner-preview').src = bot.banner;
+    document.getElementById('modal-icon-preview').src = bot.icon;
+    document.getElementById('edit-longName').value = bot.longName;
+    document.getElementById('edit-shortName').value = bot.shortName;
+    document.getElementById('edit-prefix').value = bot.prefix;
+    document.getElementById('edit-owner').value = bot.owner;
+    document.getElementById('edit-canal').value = bot.canal;
+    document.getElementById('edit-currency').value = bot.currency;
+    document.getElementById('edit-link').value = bot.link;
+    document.getElementById('edit-icon-url').value = bot.icon;
+    document.getElementById('edit-banner-url').value = bot.banner;
+
+    validateUrl(document.getElementById('edit-icon-url'), 'icon-preview');
+    validateUrl(document.getElementById('edit-banner-url'), 'banner-preview');
+
+    const lastUpdate = new Date(bot.updatedAt);
+    const formattedDate = `${lastUpdate.toLocaleDateString()} ${lastUpdate.toLocaleTimeString()}`;
+    document.getElementById('last-update').textContent = `Última sincronización: ${formattedDate}`;
+
+    modal.setAttribute('data-bot-id', idDigits);
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const modal = document.getElementById('modal-personalize');
+    modal.classList.remove('active');
+    setTimeout(() => {
+        document.body.style.overflow = 'auto';
+    }, 300);
+}
+
+async function saveBotConfig() {
+    const idDigits = document.getElementById('modal-personalize').getAttribute('data-bot-id');
+    const bots = JSON.parse(localStorage.getItem('stellarBots') || '[]');
+    const botIndex = bots.findIndex(b => b.idDigits === idDigits);
+
+    if (botIndex === -1) return showNotification('error', 'Error', 'Bot no encontrado');
+
+    const longName = document.getElementById('edit-longName').value.trim();
+    const shortName = document.getElementById('edit-shortName').value.trim();
+    const prefix = document.getElementById('edit-prefix').value.trim();
+    const owner = document.getElementById('edit-owner').value.trim();
+    const canal = document.getElementById('edit-canal').value.trim();
+    const currency = document.getElementById('edit-currency').value.trim();
+    const link = document.getElementById('edit-link').value.trim();
+    const iconUrl = document.getElementById('edit-icon-url').value.trim();
+    const bannerUrl = document.getElementById('edit-banner-url').value.trim();
+
+    if (!longName || !shortName || !prefix) {
+        return showNotification('warning', 'Campos Requeridos', 'Completa nombre largo, nombre corto y prefijo');
+    }
+
+    const isIconValid = validateUrl(document.getElementById('edit-icon-url'), 'icon-preview');
+    const isBannerValid = validateUrl(document.getElementById('edit-banner-url'), 'banner-preview');
+
+    if (!isIconValid || !isBannerValid) {
+        return showNotification('warning', 'URLs Inválidas', 'Verifica las direcciones de las imágenes');
+    }
+
+    const allowedChars = new Set(['.', '-', '#', '!', '/', '+']);
+    const hasInvalidChars = [...prefix].some(char => !allowedChars.has(char));
+
+    if (hasInvalidChars) {
+        return showNotification('error', 'Prefijo Inválido', `El prefijo solo puede contener los siguientes caracteres: ${[...allowedChars].join(', ')}`);
+    }
+
+    const payload = {
+        phone: `+${idDigits}`,
+        longName,
+        shortName,
+        canal,
+        prefix,
+        owner,
+        banner: bannerUrl,
+        icon: iconUrl,
+        currency,
+        link
+    };
+
+    try {
+        const res = await fetch('/edit-bot', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || 'Error al guardar en el servidor');
+
+        const updatedBot = {
+            ...bots[botIndex],
+            longName: data.config?.namebot || longName,
+            shortName: data.config?.namebot2 || shortName,
+            prefix: data.config?.prefijo || prefix,
+            owner: data.config?.owner || owner,
+            canal: data.config?.canal || canal,
+            currency: data.config?.currency || currency,
+            link: data.config?.link || link,
+            icon: data.config?.icon || iconUrl,
+            banner: data.config?.banner || bannerUrl,
+            updatedAt: Date.now()
+        };
+
+        bots[botIndex] = updatedBot;
+        localStorage.setItem('stellarBots', JSON.stringify(bots));
+
+        loadBots();
+        closeModal();
+        showNotification('success', 'Configuración Guardada', 'Cambios aplicados y sincronizados con el servidor');
+    } catch (e) {
+        const updatedBot = {
+            ...bots[botIndex],
+            longName,
+            shortName,
+            prefix,
+            owner,
+            canal,
+            currency,
+            link,
+            icon: iconUrl,
+            banner: bannerUrl,
+            updatedAt: Date.now()
+        };
+
+        bots[botIndex] = updatedBot;
+        localStorage.setItem('stellarBots', JSON.stringify(bots));
+
+        loadBots();
+        closeModal();
+        showNotification('warning', 'Guardado Parcial', 'Cambios guardados localmente, pero no se pudo sincronizar con el servidor: ' + e.message);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-container', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.1, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.1, width: 1 },
+                move: { enable: true, speed: 1, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'grab' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                },
+                modes: {
+                    grab: { distance: 140, line_linked: { opacity: 0.3 } },
+                    push: { particles_nb: 4 }
+                }
+            },
+            retina_detect: true
+        });
+    }
+
+    loadBots();
+
+    document.getElementById('modal-personalize').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('modal-personalize')) closeModal();
+    });
+
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.nav-glass');
+        if (window.scrollY > 50) {
+            nav.classList.add('shadow-stellar-glow');
+            nav.classList.remove('shadow-lg');
+        } else {
+            nav.classList.remove('shadow-stellar-glow');
+            nav.classList.add('shadow-lg');
+        }
+    });
+
+    const botTypeSelect = document.getElementById('botType');
+    const tokenField = document.getElementById('tokenField');
+    botTypeSelect.addEventListener('change', function() {
+        if (this.value === 'moderador' || this.value === 'premium') {
+            tokenField.classList.remove('hidden');
+        } else {
+            tokenField.classList.add('hidden');
+        }
+    });
+
+    document.getElementById('code-area').style.display = 'none';
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</body>
+</html>
