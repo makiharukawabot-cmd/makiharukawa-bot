@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { XAI_API_KEY, OPENWEATHER_API_KEY, UNSPLASH_API_KEY } = require('./config');
+const { XAI_API_KEY, OPENWEATHER_API_KEY, UNSPLASH_API_KEY } = require('./sentting.js');
 
 // APIs list (rotating for '500+' variations)
 const API_BASES = [
