@@ -15,7 +15,7 @@ gmail: "thekingdestroy507@gmail.com"
 }
 global.my = {
 ch: '120363401404146384@newsletter',
-name: 'ೃ࿔ MAKI ωαɓσƭร - ૮ɦαɳɳεℓ .ೃ࿐',
+name: '❖ 𝐌𝐀𝐊𝐈 𝐇𝐀𝐑𝐔𝐊𝐀𝐖𝐀・𝑪𝒉𝒂𝒏𝒏𝒆𝒍 ❖',
 }
 
 global.mess = {
