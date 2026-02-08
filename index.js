@@ -1,8 +1,7 @@
-import "./settings.js"
+import "./config.js"
 import main from './main.js'
 import web from './lib/system/web.js'
 import events from './commands/events.js'
-import seeCommands from './lib/system/commandLoader.js'
 import { Browsers, makeWASocket, makeCacheableSignalKeyStore, useMultiFileAuthState, fetchLatestBaileysVersion, jidDecode, DisconnectReason, jidNormalizedUser, } from "@whiskeysockets/baileys";
 import cfonts from 'cfonts';
 import pino from "pino";
@@ -33,35 +32,35 @@ const log = {
     console.log(chalk.bgRed.white.bold(`ERROR`), chalk.redBright(msg)),
 };
 
-let phoneNumber = global.botNumber || ""
-let phoneInput = ""
-const methodCodeQR = process.argv.includes("--qr")
-const methodCode = !!phoneNumber || process.argv.includes("--code")
-const DIGITS = (s = "") => String(s).replace(/\D/g, "");
+  let phoneNumber = global.botNumber || ""
+  let phoneInput = ""
+  const methodCodeQR = process.argv.includes("--qr")
+  const methodCode = !!phoneNumber || process.argv.includes("--code")
+  const DIGITS = (s = "") => String(s).replace(/\D/g, "");
 
-function normalizePhoneForPairing(input) {
-  let s = DIGITS(input);
-  if (!s) return "";
-  if (s.startsWith("0")) s = s.replace(/^0+/, "");
-  if (s.length === 10 && s.startsWith("3")) {
-    s = "57" + s;
+  function normalizePhoneForPairing(input) {
+    let s = DIGITS(input);
+    if (!s) return "";
+    if (s.startsWith("0")) s = s.replace(/^0+/, "");
+    if (s.length === 10 && s.startsWith("3")) {
+      s = "57" + s;
+    }
+    if (s.startsWith("52") && !s.startsWith("521") && s.length >= 12) {
+      s = "521" + s.slice(2);
+    }
+    if (s.startsWith("54") && !s.startsWith("549") && s.length >= 11) {
+      s = "549" + s.slice(2);
+    }
+    return s;
   }
-  if (s.startsWith("52") && !s.startsWith("521") && s.length >= 12) {
-    s = "521" + s.slice(2);
-  }
-  if (s.startsWith("54") && !s.startsWith("549") && s.length >= 11) {
-    s = "549" + s.slice(2);
-  }
-  return s;
-}
 
 const { say } = cfonts
 console.log(chalk.magentaBright('\n❀ Iniciando...'))
-say('MAKI', {
+  say('MAKI', {
   align: 'center',           
   gradient: ['red', 'blue'] 
 })
-say('Powered by Aarom', {
+  say('(power by 𝓐)', {
   font: 'console',
   align: 'center',
   gradient: ['blue', 'magenta']
@@ -203,8 +202,6 @@ async function startBot() {
     if (connection == "open") {
          const userJid = jidNormalizedUser(client.user.id)
          web(client)
-         await seeCommands()
-         await events(client)  // Quité 'm' aquí, asumiendo que events no lo necesita. Si sí, mueve esto a messages.upsert.
          const userName = client.user.name || "Desconocido"
          console.log(chalk.green.bold(`[ ✿ ]  Conectado a: ${userName}`))
     }
@@ -232,6 +229,11 @@ async function startBot() {
       console.log(err)
     }
   })
+  try {
+  await events(client, m)
+  } catch (err) {
+   console.log(chalk.gray(`[ BOT  ]  → ${err}`))
+  }
   client.decodeJid = (jid) => {
     if (!jid) return jid
     if (/:\d+@/gi.test(jid)) {
