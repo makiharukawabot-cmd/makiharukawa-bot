@@ -1,7 +1,7 @@
 {
-  "name": "Makiwabot",
+  "name": "MAKi",
   "version": "2.0",
-  "description": "WhatsApp Bot Multi Device",
+  "description": "WhatsApp Bot Multi Device (power by 𝓐)",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -14,7 +14,7 @@
     "bot-wa",
     "multi-device"
   ],
-  "author": "Xt",
+  "author": "𝓐",
   "license": "MIT",
   "engines": {
     "node": ">=21.7.3",
@@ -25,7 +25,7 @@
     "@vitalets/google-translate-api": "^8.0.0",
     "@whiskeysockets/baileys": "^7.0.0-rc.9",
     "acrcloud": "^1.4.0",
-    "aptoide-scraper": "github:OFC/dv-aptoide-scraper",
+    "aptoide-scraper": "https://github.com/makiharukawabot-cmd/makiharukawa-bot",
     "axios": "^0.24.0",
     "cfonts": "latest",
     "cors": "^2.8.5",
