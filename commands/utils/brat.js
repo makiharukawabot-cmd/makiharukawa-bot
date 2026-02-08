@@ -26,8 +26,7 @@ export default {
       await m.react('🕒')
       let user = globalThis.db.data.users[m.sender] || {}
       const name = user.name || m.sender.split('@')[0]
-      let texto1 = user.metadatos || `ʏᴜᴋɪ 🧠 Wᴀʙᴏᴛ'ꜱ`
-      let texto2 = user.metadatos2 || `@${name}`
+      let texto1 = user.metadatos || `𝐌𝐀𝐊𝐈 𝐇𝐀𝐑𝐔𝐊𝐀𝐖𝐀 👑 ʙᴏᴛ'ꜱ`      let texto2 = user.metadatos2 || `@${name}`
       const buffer = await fetchSticker(text)
       const tmpFile = `./tmp-${Date.now()}.webp`
       await fs.writeFileSync(tmpFile, buffer)
