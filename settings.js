@@ -5,7 +5,7 @@ global.botNumber = ''
 
 global.sessionName = 'Sessions/Owner'
 global.version = '^2.0 - Latest'
-global.dev = "© ⍴᥆ᥕᥱrᥱძ ᑲᥡ Anónimo"
+global.dev = "© power by 𝓐"
 global.links = {
 api: 'https://api.stellarwa.xyz',
 web: 'http://localhost:5010',
@@ -15,7 +15,7 @@ gmail: "thekingdestroy507@gmail.com"
 }
 global.my = {
 ch: '120363401404146384@newsletter',
-name: 'ೃ࿔ Maki ωαɓσƭร - ૮ɦαɳɳεℓ .ೃ࿐',
+name: 'ೃ࿔ MAKI ωαɓσƭร - ૮ɦαɳɳεℓ .ೃ࿐',
 }
 
 global.mess = {
