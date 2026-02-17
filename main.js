@@ -17,15 +17,15 @@ export default async (client, m) => {
     console.log('Cargando comandos por primera vez...');
     await seeCommands();
   }
-  
+
   if (!m.message) return
-  
+
   const sender = m.sender 
   let body = m.message.conversation || m.message.extendedTextMessage?.text || m.message.imageMessage?.caption || m.message.videoMessage?.caption || m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply?.selectedRowId || m.message.templateButtonReplyMessage?.selectedId || ''
-  
+
   initDB(m, client)
   antilink(client, m)
-  
+
   for (const name in global.plugins) {
     const plugin = global.plugins[name]
     if (plugin && typeof plugin.all === "function") {
@@ -36,55 +36,53 @@ export default async (client, m) => {
       }
     }
   }
-  
+
   const from = m.key.remoteJid
   const botJid = client.user.id.split(':')[0] + '@s.whatsapp.net' || client.user.lid
   const chat = global.db.data.chats[m.chat] || {}
   const settings = global.db.data.settings[botJid] || {}  
   const user = global.db.data.users[sender] ||= {}
   const users = chat.users[sender] || {}
-  
+
   const rawBotname = settings.namebot || '𝐌𝐀𝐊𝐈'
   const tipo = settings.type || 'Sub'
   const isValidBotname = /^[\w\s]+$/.test(rawBotname)
   const namebot = isValidBotname ? rawBotname : '𝐌𝐀𝐊𝐈'
-  
+
   const shortForms = [namebot.charAt(0), namebot.split(" ")[0], tipo.split(" ")[0], namebot.split(" ")[0].slice(0, 2), namebot.split(" ")[0].slice(0, 3)]
   const prefixes = shortForms.map(name => `${name}`)
   prefixes.unshift(namebot)
-  
-  // 🔴 AQUÍ ESTÁ LA FIX - Construir prefixes correctamente
+
+  // 🔴 FIX: Agregar '#' siempre al prefix regex
   let prefix
   if (Array.isArray(settings.prefix)) {
     const prefixArray = settings.prefix
-    prefix = new RegExp('^(' + prefixes.map(p => p.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\$&')).join('|') + ')?(' + prefixArray.map(p => p.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\$&')).join('|') + ')', 'i')
+    prefix = new RegExp('^(' + prefixes.map(p => p.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\\( &')).join('|') + ')?([#\\.]?)(' + prefixArray.map(p => p.replace(/[|\\{}()[\]^ \)+*.\-\^]/g, '\\$&')).join('|') + ')?', 'i')
   } else if (typeof settings.prefix === 'string') {
-    prefix = new RegExp('^(' + prefixes.map(p => p.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\$&')).join('|') + ')?(' + settings.prefix.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\$&') + ')', 'i')
+    prefix = new RegExp('^(' + prefixes.map(p => p.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\\( &')).join('|') + ')?([#\\.]?)(' + settings.prefix.replace(/[|\\{}()[\]^ \)+*.\-\^]/g, '\\$&') + ')?', 'i')
   } else if (settings.prefix === true) {
-    prefix = new RegExp('^', 'i')
+    prefix = new RegExp('^([#\\.]?)', 'i')
   } else {
-    prefix = new RegExp('^(' + prefixes.map(p => p.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\$&')).join('|') + ')?', 'i')
+    prefix = new RegExp('^(' + prefixes.map(p => p.replace(/[|\\{}()[\]^$+*.\-\^]/g, '\\$&')).join('|') + ')?([#\\.]?)', 'i')
   }
-  
-  // 🟢 AQUÍ ESTÁ LA MAGIA - Extraer el comando
+
+  // 🟢 Extraer el comando
   const match = body.match(prefix)
-  
+
   if (!match) return
-  
+
   const messageWithoutPrefix = body.slice(match[0].length).trim()
   const [command, ...args] = messageWithoutPrefix.split(/\s+/)
-  
+
   if (!command) return
-  
+
   // 🟢 BUSCAR EL COMANDO EN global.comandos
   const cmd = global.comandos.get(command.toLowerCase())
-  
+
   if (!cmd) {
-    // Opcional: responder cuando el comando no existe
-    // return m.reply(`Comando "${command}" no encontrado. Usa /help para ver los comandos disponibles.`)
-    return
+    return m.reply(`Comando "${command}" no encontrado. Usa ${match[0]}menu para ver los comandos disponibles.`)
   }
-  
+
   // 🟢 EJECUTAR EL COMANDO
   try {
     const context = {
@@ -95,28 +93,28 @@ export default async (client, m) => {
       command: command.toLowerCase(),
       text: messageWithoutPrefix
     }
-    
+
     // Ejecutar antes (before hook)
     if (cmd.before) {
       await cmd.before.call(client, m, { client })
     }
-    
+
     // Ejecutar el comando
     await cmd.run.call(client, client, m, args, match[0], command.toLowerCase(), messageWithoutPrefix)
-    
+
     // Ejecutar después (after hook)
     if (cmd.after) {
       await cmd.after.call(client, m, { client })
     }
-    
+
     // Incrementar contador de comandos usados
     user.usedcommands = (user.usedcommands || 0) + 1
-    
+
   } catch (err) {
     console.error(`❌ Error ejecutando comando ${command}:`, err)
     m.reply(`❌ Error al ejecutar el comando: ${err.message}`)
   }
-  
+
   // Ejecutar level
   await level(m)
 }
