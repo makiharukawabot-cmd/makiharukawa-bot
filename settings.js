@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 // Lista de dueños autorizados
-global.authorizedOwners = ['573107400303', '573508941325', '573235915041'];
+global.authorizedOwners = ['573107400303', '573508941325', '524427119018', '573247662531', '51921826291', '50493732693'];
 
 // Número del bot (dejar vacío si se detecta automáticamente)
 global.botPhone = '';
