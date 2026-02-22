@@ -1,4 +1,4 @@
-import "./setting.js"
+import "./settings.js"
 import main from './main.js'
 import web from './lib/system/web.js'
 import events from './commands/events.js'
@@ -17,6 +17,14 @@ import db from "./lib/system/database.js";
 import { startSubBot } from './lib/subs.js';
 import { exec, execSync } from "child_process";
 
+// --- FORZAR NOMBRE DE SESIÓN Y CREAR CARPETA ---
+global.sessionName = global.sessionName || './Sessions/Owner'
+try {
+  fs.mkdirSync(global.sessionName, { recursive: true })
+} catch (e) {
+  // no bloquear si falla por permisos, lo intentará useMultiFileAuthState
+}
+
 const log = {
   info: (msg) => console.log(chalk.bgBlue.white.bold(`INFO`), chalk.white(msg)),
   success: (msg) =>
@@ -32,35 +40,35 @@ const log = {
     console.log(chalk.bgRed.white.bold(`ERROR`), chalk.redBright(msg)),
 };
 
-  let phoneNumber = global.botNumber || ""
-  let phoneInput = ""
-  const methodCodeQR = process.argv.includes("--qr")
-  const methodCode = !!phoneNumber || process.argv.includes("--code")
-  const DIGITS = (s = "") => String(s).replace(/\D/g, "");
+let phoneNumber = global.botNumber || ""
+let phoneInput = ""
+const methodCodeQR = process.argv.includes("--qr")
+const methodCode = !!phoneNumber || process.argv.includes("--code")
+const DIGITS = (s = "") => String(s).replace(/\D/g, "");
 
-  function normalizePhoneForPairing(input) {
-    let s = DIGITS(input);
-    if (!s) return "";
-    if (s.startsWith("0")) s = s.replace(/^0+/, "");
-    if (s.length === 10 && s.startsWith("3")) {
-      s = "57" + s;
-    }
-    if (s.startsWith("52") && !s.startsWith("521") && s.length >= 12) {
-      s = "521" + s.slice(2);
-    }
-    if (s.startsWith("54") && !s.startsWith("549") && s.length >= 11) {
-      s = "549" + s.slice(2);
-    }
-    return s;
+function normalizePhoneForPairing(input) {
+  let s = DIGITS(input);
+  if (!s) return "";
+  if (s.startsWith("0")) s = s.replace(/^0+/, "");
+  if (s.length === 10 && s.startsWith("3")) {
+    s = "57" + s;
   }
+  if (s.startsWith("52") && !s.startsWith("521") && s.length >= 12) {
+    s = "521" + s.slice(2);
+  }
+  if (s.startsWith("54") && !s.startsWith("549") && s.length >= 11) {
+    s = "549" + s.slice(2);
+  }
+  return s;
+}
 
 const { say } = cfonts
 console.log(chalk.magentaBright('\n❀ Iniciando...'))
-  say('MAKI', {
-  align: 'center',           
-  gradient: ['red', 'blue'] 
+say('MAKI', {
+  align: 'center',
+  gradient: ['red', 'blue']
 })
-  say('(power by 𝓐)', {
+say('(power by 𝓐)', {
   font: 'console',
   align: 'center',
   gradient: ['blue', 'magenta']
@@ -106,9 +114,17 @@ if (methodCodeQR) {
   opcion = "2"
 } else if (!fs.existsSync("./Sessions/Owner/creds.json")) {
   do {
-    opcion = readlineSync.question(chalk.bold.white("\nSeleccione una opción:\n") + chalk.blueBright("1. Con código QR\n") + chalk.cyan("2. Con código de texto de 8 dígitos\n--> "))
+    opcion = readlineSync.question(
+      chalk.bold.white("\nSeleccione una opción:\n") +
+      chalk.blueBright("1. Con código QR\n") +
+      chalk.cyan("2. Con código de texto de 8 dígitos\n--> ")
+    )
     if (opcion === "2") {
-      console.log(chalk.bold.redBright(`\nPor favor, Ingrese el número de WhatsApp.\n\( {chalk.bold.yellowBright("Ejemplo: +57301******")}\n \){chalk.bold.magentaBright('---> ')} `))
+      console.log(
+        chalk.bold.redBright('\nPor favor, Ingrese el número de WhatsApp.\n') +
+        chalk.bold.yellowBright('Ejemplo: +57301******') +
+        chalk.bold.magentaBright('\n---> ')
+      )
       phoneInput = readlineSync.question("")
       phoneNumber = normalizePhoneForPairing(phoneInput)
     }
@@ -116,7 +132,8 @@ if (methodCodeQR) {
 }
 
 async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState(global.sessionName)
+  // asegúrate de pasar una ruta válida (no undefined)
+  const { state, saveCreds } = await useMultiFileAuthState(global.sessionName || './Sessions/Owner')
   const { version, isLatest } = await fetchLatestBaileysVersion();
   const logger = pino({ level: "silent" })
   console.info = () => {}
@@ -138,25 +155,27 @@ async function startBot() {
     maxIdleTimeMs: 60000,
   })
 
+  // usar nombre 'client' de forma consistente en el archivo
   global.client = clientt;
+  const client = clientt;
   client.isInit = false
   client.ev.on("creds.update", saveCreds)
   if (opcion === "2" && !fs.existsSync("./Sessions/Owner/creds.json")) {
-  setTimeout(async () => {
-    try {
-       if (!state.creds.registered) {
-        const pairing = await global.client.requestPairingCode(phoneNumber)
-        const codeBot = pairing?.match(/.{1,4}/g)?.join("-") || pairing
-        console.log(chalk.bold.white(chalk.bgMagenta(`Código de emparejamiento:`)), chalk.bold.white(chalk.white(codeBot)))
+    setTimeout(async () => {
+      try {
+        if (!state.creds.registered) {
+          const pairing = await global.client.requestPairingCode(phoneNumber)
+          const codeBot = pairing?.match(/.{1,4}/g)?.join("-") || pairing
+          console.log(chalk.bold.white(chalk.bgMagenta(`Código de emparejamiento:`)), chalk.bold.white(chalk.white(codeBot)))
+        }
+      } catch (err) {
+        console.log(chalk.red("Error al generar código:"), err)
       }
-    } catch (err) {
-      console.log(chalk.red("Error al generar código:"), err)
-    }
-  }, 3000)
-}
+    }, 3000)
+  }
 
   client.sendText = (jid, text, quoted = "", options) =>
-  client.sendMessage(jid, { text: text, ...options }, { quoted })
+    client.sendMessage(jid, { text: text, ...options }, { quoted })
   client.ev.on("connection.update", async (update) => {
     const { qr, connection, lastDisconnect, isNewLogin, receivedPendingNotifications, } = update
     if (qr && opcion === "1" && !state.creds.registered) {
@@ -196,14 +215,14 @@ async function startBot() {
         exec("rm -rf ./Sessions/Owner/*")
         process.exit(0)
       } else {
-        client.end(`Motivo de desconexión desconocido : \( {reason}| \){connection}`)
+        client.end(`Motivo de desconexión desconocido : ${reason} | ${connection}`)
       }
     }
     if (connection == "open") {
-         const userJid = jidNormalizedUser(client.user.id)
-         web(client)
-         const userName = client.user.name || "Desconocido"
-         console.log(chalk.green.bold(`[ ✿ ]  Conectado a: ${userName}`))
+      const userJid = jidNormalizedUser(client.user.id)
+      web(client)
+      const userName = client.user.name || "Desconocido"
+      console.log(chalk.green.bold(`[ ✿ ]  Conectado a: ${userName}`))
     }
     if (isNewLogin) {
       log.info("Nuevo dispositivo detectado")
@@ -230,9 +249,9 @@ async function startBot() {
     }
   })
   try {
-  await events(client, m)
+    await events(client, m)
   } catch (err) {
-   console.log(chalk.gray(`[ BOT  ]  → ${err}`))
+    console.log(chalk.gray(`[ BOT  ]  → ${err}`))
   }
   client.decodeJid = (jid) => {
     if (!jid) return jid
@@ -244,7 +263,7 @@ async function startBot() {
 }
 
 (async () => {
-    global.loadDatabase()
-    console.log(chalk.gray('[ ✿  ]  Base de datos cargada correctamente.'))
+  global.loadDatabase()
+  console.log(chalk.gray('[ ✿  ]  Base de datos cargada correctamente.'))
   await startBot()
 })()
